@@ -1,25 +1,27 @@
 import sympy
-import random
+import crypto
+from pycryptodome import random
 from math import gcd
 
-def createprimes():
-    minrange = 10 * 10 ** 1
-    maxrange = 10 * 10 ** 2
-    primenum = []
-    for x in range(0, 2):
-        chosen = random.randint(minrange, maxrange)
-        primenum.append(sympy.prime(chosen))
-    return primenum
+def luo_alkuluvut():
+    min_jarjestysluku = 10 * 10 ** 1
+    max_jarjestysluku = 10 * 10 ** 2
+    alkuluvut = []
+    for numero in range(0, 2):
+        # valittu = random.random.randint(min_jarjestysluku, max_jarjestysluku)
+        valittu = random.randint(min_jarjestysluku, max_jarjestysluku)
+        alkuluvut.append(sympy.prime(valittu))
+    return alkuluvut
 
-def choose_e(num):
-    chosen = 0
+def valitse_e(fii):
+    valittu = 0
     x = 1
     while True:
-        ri = random.randint(x, num)
-        val = gcd(ri, num)
+        satunnaisluku = random.randint(x, fii)
+        val = gcd(satunnaisluku, fii)
         if val == 1:
-            chosen = ri
-            return chosen
+            valittu = satunnaisluku
+            return valittu
 
 
 
