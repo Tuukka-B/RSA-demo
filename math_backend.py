@@ -1,7 +1,7 @@
 import sympy
 import crypto
-from pycryptodome import random
 from math import gcd
+import random
 
 def luo_alkuluvut():
     min_jarjestysluku = 10 * 10 ** 1
@@ -28,7 +28,7 @@ def valitse_e(fii):
 
 
 if __name__ == "__main__":
-    primes = createprimes()
-    print("primes: ", primes)
-    num = choose_e(160)
-    print("e: ", num)
+    alkuluvut = luo_alkuluvut()
+    print("alkuluvut: ", alkuluvut)
+    e = valitse_e(160)
+    print("e: ", e)
