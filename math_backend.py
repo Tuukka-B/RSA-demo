@@ -7,24 +7,27 @@ def createprimes():
     maxrange = 10 * 10 ** 5
     primes = []
     for x in range(0, 2):
-        primes.append(gmpy2.next_prime(random.randint(minrange, maxrange)))
+       # primes.append(sympy. (random.randint(minrange, maxrange)))
         if primes[x] == primes[x-1]:
             primes.pop(-1)
             x = x-1
 
     return primes
 
-def greatestcd(num):
-    greatest = 0
-    for x in range(1, num):
-        val = gcd(x, num)
-        if val > greatest:
-            greatest = val
+def choose_e(num):
+    chosen = 0
+    x = 1
+    while True:
+        ri = random.randint(x, num)
+        val = gcd(ri, num)
+        if val == 1:
+            chosen = ri
+            break
 
-    return greatest
+    return chosen
 
 
 
 if __name__ == "__main__":
-    num = greatestcd(160)
+    num = choose_e(160)
     print(num)
