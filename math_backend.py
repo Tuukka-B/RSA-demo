@@ -22,9 +22,9 @@ def choose_e(num):
         val = gcd(ri, num)
         if val == 1:
             chosen = ri
-            break
+            return chosen
 
-    return chosen
+
 
 
 
