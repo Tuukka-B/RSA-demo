@@ -5,12 +5,11 @@ from math import gcd
 def createprimes():
     minrange = 10 * 10 ** 1
     maxrange = 10 * 10 ** 2
-    primes = []
-    chosen = random.randint(minrange, maxrange)
-    primes.append(sympy.prime(chosen))
-    chosen = random.randint(minrange, maxrange)
-    primes.append(sympy.prime(chosen))
-    return primes
+    primenum = []
+    for x in range(0, 2):
+        chosen = random.randint(minrange, maxrange)
+        primes.append(sympy.prime(chosen))
+    return primenum
 
 def choose_e(num):
     chosen = 0
