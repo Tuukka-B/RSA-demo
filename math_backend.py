@@ -8,7 +8,7 @@ def createprimes():
     primenum = []
     for x in range(0, 2):
         chosen = random.randint(minrange, maxrange)
-        primes.append(sympy.prime(chosen))
+        primenum.append(sympy.prime(chosen))
     return primenum
 
 def choose_e(num):
