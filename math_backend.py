@@ -1,6 +1,6 @@
-import gmpy2
+import sympy
 import random
-
+from math import gcd
 
 def createprimes():
     minrange = 10 * 10 ** 2
@@ -11,8 +11,20 @@ def createprimes():
         if primes[x] == primes[x-1]:
             primes.pop(-1)
             x = x-1
+
     return primes
+
+def greatestcd(num):
+    greatest = 0
+    for x in range(1, num):
+        val = gcd(x, num)
+        if val > greatest:
+            greatest = val
+
+    return greatest
+
 
 
 if __name__ == "__main__":
-    createprimes()
+    num = greatestcd(160)
+    print(num)
