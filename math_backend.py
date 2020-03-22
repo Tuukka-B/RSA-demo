@@ -3,15 +3,13 @@ import random
 from math import gcd
 
 def createprimes():
-    minrange = 10 * 10 ** 2
-    maxrange = 10 * 10 ** 5
+    minrange = 10 * 10 ** 1
+    maxrange = 10 * 10 ** 2
     primes = []
-    for x in range(0, 2):
-       # primes.append(sympy. (random.randint(minrange, maxrange)))
-        if primes[x] == primes[x-1]:
-            primes.pop(-1)
-            x = x-1
-
+    chosen = random.randint(minrange, maxrange)
+    primes.append(sympy.prime(chosen))
+    chosen = random.randint(minrange, maxrange)
+    primes.append(sympy.prime(chosen))
     return primes
 
 def choose_e(num):
@@ -29,5 +27,7 @@ def choose_e(num):
 
 
 if __name__ == "__main__":
+    primes = createprimes()
+    print("primes: ", primes)
     num = choose_e(160)
-    print(num)
+    print("e: ", num)
