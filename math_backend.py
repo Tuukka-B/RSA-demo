@@ -28,7 +28,7 @@ def valitse_d(e):
 
 
 if __name__ == "__main__":
-    alkuluvut = luo_alkuluvut()
+    alkuluvut = luo_alkuluvut(bittimäärä=512)
     print("alkuluvut: ", alkuluvut)
     e = valitse_e(160)
     print("e: ", e)
