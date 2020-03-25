@@ -10,3 +10,5 @@ print("n: ", n)
 print("fii: ", fii)
 print("e: ", e)
 print("d: ", d)
+math = float(1/941645) % 3189216
+print(math)
