@@ -3,7 +3,7 @@ import secrets
 import math
 #import random
 
-def luo_alkuluvut(*, bittimäärä=2048):
+def luo_alkuluvut(*, bittimäärä=512):
     alkuluvut = []
     while len(alkuluvut) < 2:
         luku1 = secrets.randbits(bittimäärä)
@@ -20,7 +20,8 @@ def valitse_e(fii):
     valittu = 0
     x = 1
     while True:
-        satunnaisluku = secrets.randbelow(fii)
+        #voidaan myös valita 65537 (bitteinä yksi ykkönen ja muut nollia)
+        satunnaisluku = secrets.randbits(len(fii.to_bytes(int(512/4), byteorder="big"))-1)
         val = math.gcd(satunnaisluku, fii)
         if val == 1:
             valittu = satunnaisluku
@@ -33,7 +34,6 @@ def valitse_d(e, fii):
     x2 = 1
     y1 = 1
     temp_phi = fii
-
     while e > 0:
         temp1 = temp_phi / e
         temp2 = temp_phi - temp1 * e
@@ -49,12 +49,15 @@ def valitse_d(e, fii):
         y1 = y
 
     if temp_phi == 1:
+
         return d + fii
 
 
 if __name__ == "__main__":
     alkuluvut = luo_alkuluvut()
     print("alkuluvut: ", alkuluvut)
-    e = valitse_e(160)
+    fii = (alkuluvut[0] - 1) * (alkuluvut[1] - 1)
+    e = valitse_e(fii)
+    d = valitse_d(e, fii)
     print("e: ", e)
-    print(12345%2345)
+    print("d:", d)
