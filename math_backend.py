@@ -4,8 +4,6 @@ import math
 #import random
 
 def luo_alkuluvut(*, bittimäärä):
-    min_jarjestysluku = 10 * 10 ** 1
-    max_jarjestysluku = 10 * 10 ** 2
     alkuluvut = []
     for numero in range(0, 2):
         luku1 = secrets.randbits(512)
