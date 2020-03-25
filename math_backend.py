@@ -26,7 +26,7 @@ def valitse_e(fii):
             valittu = satunnaisluku
             return valittu
 
-def valitse_d(e, phi):
+def valitse_d(e, fii):
     d = 0
     x1 = 0
     x2 = 1
