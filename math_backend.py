@@ -5,7 +5,7 @@ import math
 
 def luo_alkuluvut(*, bittimäärä):
     alkuluvut = []
-    for numero in range(0, 2):
+    while len(alkuluvut) < 2:
         luku1 = secrets.randbits(bittimäärä)
         luku2 = secrets.randbits(bittimäärä)
         # valittu = random.randint(min_jarjestysluku, max_jarjestysluku)
