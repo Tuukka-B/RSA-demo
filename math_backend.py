@@ -26,12 +26,13 @@ def valitse_e(fii):
             valittu = satunnaisluku
             return valittu
 
+
 def valitse_d(e, fii):
     d = 0
     x1 = 0
     x2 = 1
     y1 = 1
-    temp_phi = phi
+    temp_phi = fii
 
     while e > 0:
         temp1 = temp_phi / e
@@ -48,8 +49,7 @@ def valitse_d(e, fii):
         y1 = y
 
     if temp_phi == 1:
-        return d + phi
-
+        return d + fii
 
 
 if __name__ == "__main__":
