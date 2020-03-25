@@ -10,6 +10,8 @@ def luo_alkuluvut(*, bittimäärä):
         luku2 = secrets.randbits(bittimäärä)
         # valittu = random.randint(min_jarjestysluku, max_jarjestysluku)
         alkuluvut.append(sympy.randprime(luku1, luku2))
+        if alkuluvut[-1] is None:
+            alkuluvut.pop(-1)
     return alkuluvut
 
 def valitse_e(fii):
