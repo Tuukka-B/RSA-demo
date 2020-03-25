@@ -21,7 +21,9 @@ def valitse_e(fii):
     x = 1
     while True:
         #voidaan myös valita 65537 (bitteinä yksi ykkönen ja muut nollia)
-        satunnaisluku = secrets.randbits(len(fii.to_bytes(int(512/4), byteorder="big"))-1)
+        satunnaisluku = secrets.randbits(len(fii.to_bytes(int(512/4), byteorder="big")))
+        satunnaisluku = sympy.prevprime(satunnaisluku)
+        # gcd = Euclidean algorithm
         val = math.gcd(satunnaisluku, fii)
         if val == 1:
             valittu = satunnaisluku
@@ -29,6 +31,7 @@ def valitse_e(fii):
 
 
 def valitse_d(e, fii):
+    # Extended Euclidean algorithm
     d = 0
     x1 = 0
     x2 = 1
@@ -61,3 +64,4 @@ if __name__ == "__main__":
     d = valitse_d(e, fii)
     print("e: ", e)
     print("d:", d)
+    print(len("225791077739873387007868366109268087721"))
