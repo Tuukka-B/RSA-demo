@@ -37,7 +37,7 @@ def valitse_d(e, fii):
     x1 = 0
     x2 = 1
     y1 = 1
-    temp_phi = fii
+    temp_fii = fii
 
     while e > 0:
         temp1 = temp_fii // e
