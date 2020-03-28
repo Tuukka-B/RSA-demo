@@ -32,6 +32,7 @@ def valitse_e(fii):
 
 
 def valitse_d(e, fii):
+    # Extended Euclidean algorithm
     d = 0
     x1 = 0
     x2 = 1
