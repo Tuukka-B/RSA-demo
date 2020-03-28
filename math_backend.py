@@ -1,7 +1,6 @@
 import sympy
 import secrets
 import math
-#import random
 
 e = 0
 fii = 0
@@ -11,10 +10,12 @@ n = 0
 bitit = 0
 
 def tuo_avaimet(e_i=None, fii_i=None, alkuluvut_i=[], d_i=None):
+    # tuodaan globaalit muuttujat
     global e
     global fii
     global alkuluvut
     global d
+    #korvataan globaalit muuttujat, jos parametreissa uusia arvoja
     if e_i is not None:
         e = e_i
     if fii_i is not None:
@@ -24,11 +25,13 @@ def tuo_avaimet(e_i=None, fii_i=None, alkuluvut_i=[], d_i=None):
     if d_i is not None:
         d = d_i
 
-def luo_alkuluvut(*, bittimäärä=512):
+def luo_alkuluvut(*, bittimäärä=1024):
+    # tuodaan globaalit muuttujat
     global alkuluvut
     global fii
     global n
     global bitit
+    # määritetään bittimäärä alkuluvuille
     bitit = bittimäärä
     if len(alkuluvut) == 2:
         input("Paina enter ylikirjoittaaksesi vanhat alkuluvut")
@@ -50,22 +53,29 @@ def luo_alkuluvut(*, bittimäärä=512):
     return alkuluvut, fii, n
 
 def valitse_fii():
+    # tuodaan globaalit muuttujat
     global alkuluvut
     global fii
+    # lasketaan fii alkulukujen perusteella
     fii = (alkuluvut[0] - 1) * (alkuluvut[1] - 1)
 
 
 def valitse_e():
     global fii
     while True:
-        #voidaan myös valita 65537 (bitteinä yksi ykkönen ja muut nollia)
         # satunnaisluku = secrets.randbits(len(fii.to_bytes(bitit//4, byteorder="big")))
+        # valitaan 65537 luvuksi, jonka pohjalta eksponentti e lasketaan
         e_kanta = 65537
-        e_kanta_bytes = len(e_kanta.to_bytes(16, byteorder="big"))
-        # input(testibytes)
+        # koska toteutuksessamme käytämme tavuja ja bittejä voimakkaasti avuksi,
+        # muodostamme e:n, että se on e_kanta säilöttynä tavumäärä muuttujassa määritettyyn tavumäärään
+        tavu_maara = 24
+        e_kanta_bytes = len(e_kanta.to_bytes(tavu_maara, byteorder="big"))
+        # muodostetaan kaksi lukua, josta haemme seuraavaksi alimman alkuluvun
+        # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku haetaan aina alemmaksi kuin ne)
         satunnaisluku = secrets.randbits(e_kanta_bytes)
         satunnaisluku = sympy.prevprime(satunnaisluku)
-        # gcd = Euclidean algorithm
+        # gcd on algoritmi, joka kulkee nimellä 'Euclidean algorithm'
+        # sillä varmistetaan, että e:ksi valitulla satunnaisluvulla ei ole yhteisiä tekijöitä fii:n kanssa
         val = math.gcd(satunnaisluku, fii)
         if val == 1:
             global e
@@ -75,7 +85,7 @@ def valitse_e():
 
 
 def valitse_d(e_i=None, fii_i=None):
-    # Extended Euclidean algorithm
+    # tämä algoritmi kulkee nimellä 'Extended Euclidean algorithm'
     global e
     global fii
     d_i = 0
@@ -115,36 +125,40 @@ def ota_avaimet(julkinen_avain, yksityinen_avain):
         d, n = yksityinen_avain
 
 def salaa(salaamaton_teksti, julkinen_avain=None):
-    #Unpack the key into it's components
+    # otetaan globaalit muuttujat käyttöön
     global n
     global e
     avain = None
+    # korvataan globaalit muuttujat, jos parametreissa on annettu uudet arvot avaimille
     if avain is not None:
         e, n = julkinen_avain
+    # määritetään avain ((kosmeettinen toimenpide, sillä voisimme käyttää myös suoraan muuttujaa e)
     avain = e
-    #Convert each letter in the plaintext to numbers based on the character using a^b mod m
-    cipher = [(ord(char) ** avain) % n for char in salaamaton_teksti]
-    #Return the array of bytes
-    return cipher
-
+    #Muutetaan jokainen kirjain salatuksi numeroksi käyttämällä kaavaa a^b mod m
+    salattu = [(ord(char) ** avain) % n for char in salaamaton_teksti]
+    #Palautetaan salatut kirjaimet listana
+    return salattu
 
 def pura(salattu_teksti,yksityinen_avain=None):
-    #Unpack the key into its components
+    # otetaan käyttöön globaalit muuuttujat
     global d
     global n
+    # korvataan globaalit muuttujat, jos parametreissa on annettu uudet
     if yksityinen_avain is not None:
         d, n = yksityinen_avain
+
+    # määritetään avain (kosmeettinen toimenpide, sillä voisimme käyttää myös suoraan muuttujaa d)
     avain = d
-    #Generate the plaintext based on the ciphertext and key using a^b mod m
-    # plain = [chr((char ** avain) % n) for char in salattu_teksti]
+
     """
     Pow-funktio (pow(x, y, z):
-    x - a number, the base
-    y - a number, the exponent
-    z (optional) - a number, used for modulus
+    x - kantanumero
+    y - eksponenttinumero
+    z - modulus-numero
     """
+    # Puretaan salaus avaimella käyttäen kaavaa a^b mod m
     plain = [chr(pow(char, avain, n)) for char in salattu_teksti]
-    #Return the array of bytes as a string
+    # Palautetaan purettu teksti string-muuttujana
     return ''.join(plain)
 
 
@@ -152,9 +166,9 @@ if __name__ == "__main__":
     alkuluvut = luo_alkuluvut()
     print("alkuluvut: ", alkuluvut[0])
     print("fii: ", fii)
-    # fii = (alkuluvut[0][0] - 1) * (alkuluvut[0][1] - 1)
+    pituus = int(math.log(fii, 256)) + 1
+    input(pituus)
     e = valitse_e()
-    # print("Ok")
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
