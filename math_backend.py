@@ -3,66 +3,140 @@ import secrets
 import math
 #import random
 
+e = 0
+fii = 0
+alkuluvut = []
+d = 0
+n = 0
+bitit = 0
+
+def tuo_avaimet(e_i=None, fii_i=None, alkuluvut_i=[], d_i=None):
+    global e
+    global fii
+    global alkuluvut
+    global d
+    if e_i is not None:
+        e = e_i
+    if fii_i is not None:
+        fii = fii_i
+    if len(alkuluvut_i) == 2:
+        alkuluvut = alkuluvut_i
+    if d_i is not None:
+        d = d_i
+
 def luo_alkuluvut(*, bittimäärä=512):
+    global alkuluvut
+    global fii
+    global n
+    global bitit
+    bitit = bittimäärä
+    if len(alkuluvut) == 2:
+        input("Paina enter ylikirjoittaaksesi vanhat alkuluvut")
     alkuluvut = []
     while len(alkuluvut) < 2:
-        luku1 = secrets.randbits(bittimäärä)
-        luku2 = secrets.randbits(bittimäärä)
+        luku1 = secrets.randbits(bitit)
+        luku2 = secrets.randbits(bitit)
         # valittu = random.randint(min_jarjestysluku, max_jarjestysluku)
         if luku1 > luku2:
             alkuluvut.append(sympy.randprime(luku2, luku1))
         else:
             alkuluvut.append(sympy.randprime(luku1, luku2))
 
-    return alkuluvut
+    p = alkuluvut[0]
+    q = alkuluvut[1]
+    n = p * q
+    fii = (p - 1) * (q - 1)
 
-def valitse_e(fii):
-    valittu = 0
-    x = 1
+    return alkuluvut, fii, n
+
+def valitse_fii():
+    global alkuluvut
+    global fii
+    fii = (alkuluvut[0] - 1) * (alkuluvut[1] - 1)
+
+
+def valitse_e():
+    global fii
     while True:
         #voidaan myös valita 65537 (bitteinä yksi ykkönen ja muut nollia)
-        satunnaisluku = secrets.randbits(len(fii.to_bytes(int(512/4), byteorder="big")))
+        satunnaisluku = secrets.randbits(len(fii.to_bytes(bitit//4, byteorder="big")))
         satunnaisluku = sympy.prevprime(satunnaisluku)
         # gcd = Euclidean algorithm
         val = math.gcd(satunnaisluku, fii)
         if val == 1:
-            valittu = satunnaisluku
-            return valittu
+            global e
+            e = satunnaisluku
+            return e
 
 
 
-def valitse_d(e, fii):
+def valitse_d(e_i=None, fii_i=None):
     # Extended Euclidean algorithm
-    d = 0
+    global e
+    global fii
+    d_i = 0
     x1 = 0
     x2 = 1
     y1 = 1
     temp_fii = fii
+    temp_e = e
 
-    while e > 0:
-        temp1 = temp_fii // e
+    while temp_e > 0:
+        temp1 = temp_fii // temp_e
         temp2 = temp_fii - temp1 * e
-        temp_fii = e
-        e = temp2
+        temp_fii = temp_e
+        temp_e = temp2
 
         x = x2 - temp1 * x1
-        y = d - temp1 * y1
+        y = d_i - temp1 * y1
 
         x2 = x1
         x1 = x
-        d = y1
+        d_i = y1
         y1 = y
 
     if temp_fii == 1:
-        return d + fii
+        global d
+        d = d_i + fii
+        return d
+
+def anna_avaimet():
+    # e, n = julkinen avain
+    # d, n = yksityinen avain
+    return (e, n), (d, n)
+
+def salaa(salaamaton_teksti, julkinen_avain=None):
+    #Unpack the key into it's components
+    global n
+    global e
+    avain = None
+    if avain is None:
+        pass
+    else:
+        e, n = julkinen_avain
+    avain = e
+    #Convert each letter in the plaintext to numbers based on the character using a^b mod m
+    cipher = [(ord(char) ** avain) % n for char in salaamaton_teksti]
+    #Return the array of bytes
+    return cipher
+
+
+def pura(avain, salattu_teksti):
+    #Unpack the key into its components
+    key, n = pk
+    #Generate the plaintext based on the ciphertext and key using a^b mod m
+    plain = [chr((char ** key) % n) for char in salattu_teksti]
+    #Return the array of bytes as a string
+    return ''.join(plain)
 
 
 if __name__ == "__main__":
     alkuluvut = luo_alkuluvut()
     print("alkuluvut: ", alkuluvut)
-    fii = (alkuluvut[0] - 1) * (alkuluvut[1] - 1)
-    e = valitse_e(fii)
-    d = valitse_d(e, fii)
+    # fii = (alkuluvut[0][0] - 1) * (alkuluvut[0][1] - 1)
+    e = valitse_e()
+    d = valitse_d()
     print("e: ", e)
     print("d:", d)
-    print(len("225791077739873387007868366109268087721"))
+    # salattu= salaa("Onpa hauska juttu.")
+    # print(salattu)
