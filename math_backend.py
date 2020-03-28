@@ -30,17 +30,18 @@ def valitse_e(fii):
             return valittu
 
 
+
 def valitse_d(e, fii):
-    # Extended Euclidean algorithm
     d = 0
     x1 = 0
     x2 = 1
     y1 = 1
     temp_phi = fii
+
     while e > 0:
-        temp1 = temp_phi / e
-        temp2 = temp_phi - temp1 * e
-        temp_phi = e
+        temp1 = temp_fii // e
+        temp2 = temp_fii - temp1 * e
+        temp_fii = e
         e = temp2
 
         x = x2 - temp1 * x1
@@ -51,8 +52,7 @@ def valitse_d(e, fii):
         d = y1
         y1 = y
 
-    if temp_phi == 1:
-
+    if temp_fii == 1:
         return d + fii
 
 
