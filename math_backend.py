@@ -24,7 +24,7 @@ def tuo_avaimet(e_i=None, fii_i=None, alkuluvut_i=[], d_i=None):
     if d_i is not None:
         d = d_i
 
-def luo_alkuluvut(*, bittimäärä=16):
+def luo_alkuluvut(*, bittimäärä=512):
     global alkuluvut
     global fii
     global n
@@ -59,11 +59,11 @@ def valitse_e():
     global fii
     while True:
         #voidaan myös valita 65537 (bitteinä yksi ykkönen ja muut nollia)
-        #satunnaisluku = secrets.randbits(len((fii).to_bytes(bitit, byteorder="big")))
-        testi = 65538
-        testibytes = len(testi.to_bytes(16, byteorder="big"))
+        # satunnaisluku = secrets.randbits(len(fii.to_bytes(bitit//4, byteorder="big")))
+        e_kanta = 65537
+        e_kanta_bytes = len(e_kanta.to_bytes(16, byteorder="big"))
         # input(testibytes)
-        satunnaisluku = secrets.randbits(testibytes)
+        satunnaisluku = secrets.randbits(e_kanta_bytes)
         satunnaisluku = sympy.prevprime(satunnaisluku)
         # gcd = Euclidean algorithm
         val = math.gcd(satunnaisluku, fii)
@@ -109,6 +109,11 @@ def anna_avaimet():
     # d, n = yksityinen avain
     return (e, n), (d, n)
 
+def ota_avaimet(julkinen_avain, yksityinen_avain):
+        global e, d, n
+        e, n = julkinen_avain
+        d, n = yksityinen_avain
+
 def salaa(salaamaton_teksti, julkinen_avain=None):
     #Unpack the key into it's components
     global n
@@ -132,6 +137,12 @@ def pura(salattu_teksti,yksityinen_avain=None):
     avain = d
     #Generate the plaintext based on the ciphertext and key using a^b mod m
     # plain = [chr((char ** avain) % n) for char in salattu_teksti]
+    """
+    Pow-funktio (pow(x, y, z):
+    x - a number, the base
+    y - a number, the exponent
+    z (optional) - a number, used for modulus
+    """
     plain = [chr(pow(char, avain, n)) for char in salattu_teksti]
     #Return the array of bytes as a string
     return ''.join(plain)
@@ -143,7 +154,7 @@ if __name__ == "__main__":
     print("fii: ", fii)
     # fii = (alkuluvut[0][0] - 1) * (alkuluvut[0][1] - 1)
     e = valitse_e()
-    print("Ok")
+    # print("Ok")
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
