@@ -24,7 +24,7 @@ def tuo_avaimet(e_i=None, fii_i=None, alkuluvut_i=[], d_i=None):
     if d_i is not None:
         d = d_i
 
-def luo_alkuluvut(*, bittimäärä=512):
+def luo_alkuluvut(*, bittimäärä=16):
     global alkuluvut
     global fii
     global n
@@ -59,7 +59,11 @@ def valitse_e():
     global fii
     while True:
         #voidaan myös valita 65537 (bitteinä yksi ykkönen ja muut nollia)
-        satunnaisluku = secrets.randbits(len(fii.to_bytes(bitit//4, byteorder="big")))
+        #satunnaisluku = secrets.randbits(len((fii).to_bytes(bitit, byteorder="big")))
+        testi = 65538
+        testibytes = len(testi.to_bytes(16, byteorder="big"))
+        # input(testibytes)
+        satunnaisluku = secrets.randbits(testibytes)
         satunnaisluku = sympy.prevprime(satunnaisluku)
         # gcd = Euclidean algorithm
         val = math.gcd(satunnaisluku, fii)
@@ -83,7 +87,7 @@ def valitse_d(e_i=None, fii_i=None):
 
     while temp_e > 0:
         temp1 = temp_fii // temp_e
-        temp2 = temp_fii - temp1 * e
+        temp2 = temp_fii - temp1 * temp_e
         temp_fii = temp_e
         temp_e = temp2
 
@@ -110,9 +114,7 @@ def salaa(salaamaton_teksti, julkinen_avain=None):
     global n
     global e
     avain = None
-    if avain is None:
-        pass
-    else:
+    if avain is not None:
         e, n = julkinen_avain
     avain = e
     #Convert each letter in the plaintext to numbers based on the character using a^b mod m
@@ -121,22 +123,30 @@ def salaa(salaamaton_teksti, julkinen_avain=None):
     return cipher
 
 
-def pura(avain, salattu_teksti):
+def pura(salattu_teksti,yksityinen_avain=None):
     #Unpack the key into its components
-    key, n = pk
+    global d
+    global n
+    if yksityinen_avain is not None:
+        d, n = yksityinen_avain
+    avain = d
     #Generate the plaintext based on the ciphertext and key using a^b mod m
-    plain = [chr((char ** key) % n) for char in salattu_teksti]
+    plain = [chr((char ** avain) % n) for char in salattu_teksti]
     #Return the array of bytes as a string
     return ''.join(plain)
 
 
 if __name__ == "__main__":
     alkuluvut = luo_alkuluvut()
-    print("alkuluvut: ", alkuluvut)
+    print("alkuluvut: ", alkuluvut[0])
+    print("fii: ", fii)
     # fii = (alkuluvut[0][0] - 1) * (alkuluvut[0][1] - 1)
     e = valitse_e()
+    print("Ok")
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
-    # salattu= salaa("Onpa hauska juttu.")
-    # print(salattu)
+    salattu = salaa("Onpa hauska juttu.")
+    print(salattu)
+    viesti = pura(salattu)
+    print(viesti)
