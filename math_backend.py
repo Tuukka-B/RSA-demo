@@ -131,7 +131,8 @@ def pura(salattu_teksti,yksityinen_avain=None):
         d, n = yksityinen_avain
     avain = d
     #Generate the plaintext based on the ciphertext and key using a^b mod m
-    plain = [chr((char ** avain) % n) for char in salattu_teksti]
+    # plain = [chr((char ** avain) % n) for char in salattu_teksti]
+    plain = [chr(pow(char, avain, n)) for char in salattu_teksti]
     #Return the array of bytes as a string
     return ''.join(plain)
 
