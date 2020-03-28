@@ -25,7 +25,7 @@ def tuo_avaimet(e_i=None, fii_i=None, alkuluvut_i=[], d_i=None):
     if d_i is not None:
         d = d_i
 
-def luo_alkuluvut(*, bittimäärä=1024):
+def luo_alkuluvut_fii(*, bittimäärä=1024):
     # tuodaan globaalit muuttujat
     global alkuluvut
     global fii
@@ -52,14 +52,6 @@ def luo_alkuluvut(*, bittimäärä=1024):
 
     return alkuluvut, fii, n
 
-def valitse_fii():
-    # tuodaan globaalit muuttujat
-    global alkuluvut
-    global fii
-    # lasketaan fii alkulukujen perusteella
-    fii = (alkuluvut[0] - 1) * (alkuluvut[1] - 1)
-
-
 def valitse_e():
     global fii
     while True:
@@ -67,15 +59,16 @@ def valitse_e():
         # valitaan 65537 luvuksi, jonka pohjalta eksponentti e lasketaan
         e_kanta = 65537
         # koska toteutuksessamme käytämme tavuja ja bittejä voimakkaasti avuksi,
-        # muodostamme e:n, että se on e_kanta säilöttynä tavumäärä muuttujassa määritettyyn tavumäärään
-        tavu_maara = 24
-        e_kanta_bytes = len(e_kanta.to_bytes(tavu_maara, byteorder="big"))
+        # muodostamme e:n, että se sisältää yhtä monta tavua, kuin e_kanta
+        tavumaara = int(math.log(e_kanta, 256)) + 1
+        e_kanta_bytes = len(e_kanta.to_bytes(tavumaara, byteorder="big"))
         # muodostetaan kaksi lukua, josta haemme seuraavaksi alimman alkuluvun
-        # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku haetaan aina alemmaksi kuin ne)
+        # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku valitaan aina pienemmäksi kuin ne)
         satunnaisluku = secrets.randbits(e_kanta_bytes)
         satunnaisluku = sympy.prevprime(satunnaisluku)
         # gcd on algoritmi, joka kulkee nimellä 'Euclidean algorithm'
-        # sillä varmistetaan, että e:ksi valitulla satunnaisluvulla ei ole yhteisiä tekijöitä fii:n kanssa
+        # sillä varmistetaan, että e:ksi valitulla satunnaisluvulla ei ole muita yhteisiä tekijöitä fii:n kanssa, paitsi
+        # numero 1.
         val = math.gcd(satunnaisluku, fii)
         if val == 1:
             global e
@@ -86,6 +79,8 @@ def valitse_e():
 
 def valitse_d(e_i=None, fii_i=None):
     # tämä algoritmi kulkee nimellä 'Extended Euclidean algorithm'
+    # algoritmi etsii ehdot, jossa totetuu ax + by = gcd(a, b)
+    # meillä yhtälöön sijoitetaan x(fii) + d(e) = gcd(x, d)
     global e
     global fii
     d_i = 0
@@ -94,11 +89,17 @@ def valitse_d(e_i=None, fii_i=None):
     y1 = 1
     temp_fii = fii
     temp_e = e
+    if e_i is not None and fii_i is not None:
+        temp_fii = fii_i
+        temp_e = e_i
 
     while temp_e > 0:
-        temp1 = temp_fii // temp_e
+        # Koko toimitus voidaan korvata seuraavalla (nämä pois):
+        """temp1 = temp_fii // temp_e
         temp2 = temp_fii - temp1 * temp_e
-        temp_fii = temp_e
+        temp_fii = temp_e"""
+        # uusi tapa (seuraava rivi):
+        temp_fii = math.gcd(temp_fii, temp_e)
         temp_e = temp2
 
         x = x2 - temp1 * x1
@@ -120,9 +121,9 @@ def anna_avaimet():
     return (e, n), (d, n)
 
 def ota_avaimet(julkinen_avain, yksityinen_avain):
-        global e, d, n
-        e, n = julkinen_avain
-        d, n = yksityinen_avain
+    global e, d, n
+    e, n = julkinen_avain
+    d, n = yksityinen_avain
 
 def salaa(salaamaton_teksti, julkinen_avain=None):
     # otetaan globaalit muuttujat käyttöön
@@ -143,13 +144,12 @@ def pura(salattu_teksti,yksityinen_avain=None):
     # otetaan käyttöön globaalit muuuttujat
     global d
     global n
-    # korvataan globaalit muuttujat, jos parametreissa on annettu uudet
+    # korvataan globaalit muuttujat jos parametreissa on annettu uudet
     if yksityinen_avain is not None:
         d, n = yksityinen_avain
 
     # määritetään avain (kosmeettinen toimenpide, sillä voisimme käyttää myös suoraan muuttujaa d)
     avain = d
-
     """
     Pow-funktio (pow(x, y, z):
     x - kantanumero
@@ -163,11 +163,11 @@ def pura(salattu_teksti,yksityinen_avain=None):
 
 
 if __name__ == "__main__":
-    alkuluvut = luo_alkuluvut()
+    alkuluvut = luo_alkuluvut_fii()
     print("alkuluvut: ", alkuluvut[0])
     print("fii: ", fii)
-    pituus = int(math.log(fii, 256)) + 1
-    input(pituus)
+    # pituus = int(math.log(fii, 256)) + 1
+    # input(pituus)
     e = valitse_e()
     d = valitse_d()
     print("e: ", e)
