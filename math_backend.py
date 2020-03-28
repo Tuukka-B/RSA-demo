@@ -94,19 +94,16 @@ def valitse_d(e_i=None, fii_i=None):
         temp_e = e_i
 
     while temp_e > 0:
-        # Koko toimitus voidaan korvata seuraavalla (nämä pois):
-        """temp1 = temp_fii // temp_e
+        #kolme seuraavaa riviä antavat temp_fiille saman arvon kuin gcd(temp_fii_temp_e)
+        temp1 = temp_fii // temp_e
         temp2 = temp_fii - temp1 * temp_e
-        temp_fii = temp_e"""
-        # uusi tapa (seuraava rivi):
-        temp_e_new = (temp_fii - temp_fii//temp_e) * temp_e
-        temp_fii = math.gcd(temp_fii, temp_e)
-        temp_e = temp_e_new
-        """
+        temp_fii = temp_e
         temp_e = temp2
+
+        # lasketaan d:lle ja muille muuttujille arvo ylempien laskujen pohjalta
         x = x2 - temp1 * x1
         y = d_i - temp1 * y1
-        """
+
         x2 = x1
         x1 = x
         d_i = y1
