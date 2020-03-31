@@ -162,6 +162,7 @@ def pura(salattu_teksti,yksityinen_avain=None):
 
 
 if __name__ == "__main__":
+    """
     alkuluvut = luo_alkuluvut_fii()
     print("alkuluvut: ", alkuluvut[0])
     print("fii: ", fii)
@@ -175,3 +176,16 @@ if __name__ == "__main__":
     print(salattu)
     viesti = pura(salattu)
     print(viesti)
+    """
+    e = 9
+    p = 71
+    q = 83
+    fii = (p-1)*(q-1)
+    n = p * q
+    tuo_avaimet(e, fii, [p, q])
+    d = valitse_d()
+    print(d)
+    salattu = salaa("d", (e, n))
+    print("Salattu:", salattu)
+    purettu = pura(salattu)
+    print("Purettu:", purettu)
