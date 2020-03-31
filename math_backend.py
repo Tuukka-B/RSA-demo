@@ -65,11 +65,17 @@ def valitse_e():
         # koska toteutuksessamme käytämme tavuja ja bittejä voimakkaasti avuksi,
         # muodostamme e:n, että se sisältää yhtä monta tavua, kuin e_kanta
         tavumaara = int(math.log(e_kanta, 256)) + 1
-        e_kanta_bytes = len(e_kanta.to_bytes(tavumaara, byteorder="big"))
+        e_kanta_bits = len(e_kanta.to_bytes(tavumaara, byteorder="big"))*8
         # muodostetaan kaksi lukua, josta haemme seuraavaksi alimman alkuluvun
         # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku valitaan aina pienemmäksi kuin ne)
-        satunnaisluku = secrets.randbits(e_kanta_bytes)
-        satunnaisluku = sympy.prevprime(satunnaisluku)
+        satunnaisluku = secrets.randbits(e_kanta_bits)
+        # input(satunnaisluku)
+        while True:
+            try:
+                satunnaisluku = sympy.prevprime(satunnaisluku)
+                break
+            except ValueError:
+                satunnaisluku = secrets.randbits(e_kanta_bits)
         # gcd on algoritmi, joka kulkee nimellä 'Euclidean algorithm'
         # sillä varmistetaan, että e:ksi valitulla satunnaisluvulla ei ole muita yhteisiä tekijöitä fii:n kanssa, paitsi
         # numero 1.
