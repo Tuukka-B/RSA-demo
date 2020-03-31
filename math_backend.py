@@ -36,7 +36,9 @@ def luo_alkuluvut_fii(*, bittimäärä=1024):
     if len(alkuluvut) == 2:
         input("Paina enter ylikirjoittaaksesi vanhat alkuluvut")
     alkuluvut = []
+
     while len(alkuluvut) < 2:
+
         luku1 = secrets.randbits(bitit)
         luku2 = secrets.randbits(bitit)
         # valittu = random.randint(min_jarjestysluku, max_jarjestysluku)
@@ -44,6 +46,8 @@ def luo_alkuluvut_fii(*, bittimäärä=1024):
             alkuluvut.append(sympy.randprime(luku2, luku1))
         else:
             alkuluvut.append(sympy.randprime(luku1, luku2))
+
+        alkuluvut.append(sympy.prevprime(alkuluvut[0]))
 
     p = alkuluvut[0]
     q = alkuluvut[1]
@@ -162,7 +166,7 @@ def pura(salattu_teksti,yksityinen_avain=None):
 
 
 if __name__ == "__main__":
-    """
+
     alkuluvut = luo_alkuluvut_fii()
     print("alkuluvut: ", alkuluvut[0])
     print("fii: ", fii)
@@ -184,8 +188,9 @@ if __name__ == "__main__":
     n = p * q
     tuo_avaimet(e, fii, [p, q])
     d = valitse_d()
-    print(d)
+    print("d:", d)
     salattu = salaa("d", (e, n))
     print("Salattu:", salattu)
     purettu = pura(salattu)
     print("Purettu:", purettu)
+    """
