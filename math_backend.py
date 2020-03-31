@@ -66,7 +66,7 @@ def valitse_e():
         # muodostamme e:n, että se sisältää yhtä monta tavua, kuin e_kanta
         tavumaara = int(math.log(e_kanta, 256)) +1
         # input(tavumaara)
-        e_kanta_bits = len(e_kanta.to_bytes(tavumaara, byteorder="big"))*8
+        e_kanta_bits = len(e_kanta.to_bytes(tavumaara, byteorder="big"))*8 + 4
         # muodostetaan kaksi lukua, josta haemme seuraavaksi alimman alkuluvun
         # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku valitaan aina pienemmäksi kuin ne)
         satunnaisluku = secrets.randbits(e_kanta_bits)
@@ -174,6 +174,10 @@ def pura(salattu_teksti,yksityinen_avain=None):
 
 if __name__ == "__main__":
 
+    total = 0
+    for i in range(0, 63):
+        total += i
+    input(total)
     alkuluvut = luo_alkuluvut_fii()
     print("alkuluvut: ", alkuluvut[0])
     print("fii: ", fii)
