@@ -61,10 +61,11 @@ def valitse_e():
     while True:
         # satunnaisluku = secrets.randbits(len(fii.to_bytes(bitit//4, byteorder="big")))
         # valitaan 65537 luvuksi, jonka pohjalta eksponentti e lasketaan
-        e_kanta = 65537
+        e_kanta = 32768
         # koska toteutuksessamme käytämme tavuja ja bittejä voimakkaasti avuksi,
         # muodostamme e:n, että se sisältää yhtä monta tavua, kuin e_kanta
-        tavumaara = int(math.log(e_kanta, 256)) + 1
+        tavumaara = int(math.log(e_kanta, 256)) +1
+        input(tavumaara)
         e_kanta_bits = len(e_kanta.to_bytes(tavumaara, byteorder="big"))*8
         # muodostetaan kaksi lukua, josta haemme seuraavaksi alimman alkuluvun
         # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku valitaan aina pienemmäksi kuin ne)
