@@ -84,7 +84,7 @@ def valitse_e(vakio_e=None):
         # numero 1.
         val = math.gcd(satunnaisluku, fii)
         while val != 1:
-            satunnaisluku += 1
+            satunnaisluku = sympy.nextprime(satunnaisluku)
             val = math.gcd(satunnaisluku, fii)
         global e
         e = satunnaisluku
