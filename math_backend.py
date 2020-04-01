@@ -75,6 +75,9 @@ def valitse_e(vakio_e=None):
             # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku valitaan aina pienemmäksi kuin ne)
             satunnaisluku = secrets.randbits(e_kanta_bits)
             satunnaisluku = sympy.prevprime(satunnaisluku)
+        elif vakio_e > fii:
+            print("eksponentti e ei saa olla suurempi kuin fii, kokeile toisella numerolla...")
+            return None
         else:
             satunnaisluku = vakio_e
             satunnaisluku = sympy.prevprime(satunnaisluku)
@@ -142,6 +145,8 @@ def salaa(salaamaton_teksti, julkinen_avain=None):
     # otetaan globaalit muuttujat käyttöön
     global n
     global e
+    if e == 0:
+        print("Virhe: e ei määritelty! Ohjelma sammuu...")
     alkuaika = time.time()
     avain = None
     # korvataan globaalit muuttujat, jos parametreissa on annettu uudet arvot avaimille
