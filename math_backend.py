@@ -100,6 +100,8 @@ def valitse_d(e_i=None, fii_i=None):
     # meillä yhtälöön sijoitetaan x(fii) + d(e) = gcd(x, d)
     global e
     global fii
+    if e is None:
+        raise ValueError("Virhe: e ei määritelty! Ohjelma sammuu...")
     d_i = 0
     x1 = 0
     x2 = 1
@@ -145,8 +147,8 @@ def salaa(salaamaton_teksti, julkinen_avain=None):
     # otetaan globaalit muuttujat käyttöön
     global n
     global e
-    if e == 0:
-        print("Virhe: e ei määritelty! Ohjelma sammuu...")
+    if e is None:
+        raise ValueError("Virhe: e ei määritelty! Ohjelma sammuu...")
     alkuaika = time.time()
     avain = None
     # korvataan globaalit muuttujat, jos parametreissa on annettu uudet arvot avaimille
@@ -197,7 +199,7 @@ if __name__ == "__main__":
     print("fii: ", fii)
     # pituus = int(math.log(fii, 256)) + 1
     # input(pituus)
-    e = valitse_e()
+    e = valitse_e(1000**210)
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
