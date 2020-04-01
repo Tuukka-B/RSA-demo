@@ -77,6 +77,8 @@ def valitse_e(vakio_e=None):
             satunnaisluku = sympy.prevprime(satunnaisluku)
         else:
             satunnaisluku = vakio_e
+            satunnaisluku = sympy.prevprime(satunnaisluku)
+
         # gcd on algoritmi, joka kulkee nimellä 'Euclidean algorithm'
         # sillä varmistetaan, että e:ksi valitulla satunnaisluvulla ei ole muita yhteisiä tekijöitä fii:n kanssa, paitsi
         # numero 1.
