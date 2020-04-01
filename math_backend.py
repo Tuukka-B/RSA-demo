@@ -1,6 +1,7 @@
 import sympy
 import secrets
 import math
+import time
 
 e = 0
 fii = 0
@@ -56,7 +57,7 @@ def luo_alkuluvut_fii(*, bittimäärä=1024):
 
     return alkuluvut, fii, n
 
-def valitse_e():
+def valitse_e(vakio_e=None):
     global fii
     while True:
         # satunnaisluku = secrets.randbits(len(fii.to_bytes(bitit//4, byteorder="big")))
@@ -64,28 +65,28 @@ def valitse_e():
         e_kanta = 32768  # = 65537 / 2
         # koska toteutuksessamme käytämme tavuja ja bittejä voimakkaasti avuksi,
         # muodostamme e:n, että se sisältää yhtä monta tavua, kuin e_kanta
-        tavumaara = int(math.log(e_kanta, 256)) +1
-        # input(tavumaara)
-        e_kanta_bits = len(e_kanta.to_bytes(tavumaara, byteorder="big"))*8 + 4
-        # muodostetaan kaksi lukua, josta haemme seuraavaksi alimman alkuluvun
-        # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku valitaan aina pienemmäksi kuin ne)
-        satunnaisluku = secrets.randbits(e_kanta_bits)
-        # input(satunnaisluku)
-        while True:
-            try:
-                satunnaisluku = sympy.prevprime(satunnaisluku)
-                break
-            except ValueError:
-                satunnaisluku = secrets.randbits(e_kanta_bits)
+        tavumaara = 0
+        e_kanta_bits = 0
+        satunnaisluku = 0
+        if not vakio_e:
+            tavumaara = int(math.log(e_kanta, 256)) +1
+            e_kanta_bits = len(e_kanta.to_bytes(tavumaara, byteorder="big"))*8 + 4
+            # muodostetaan kaksi lukua, josta haemme seuraavaksi alimman alkuluvun
+            # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku valitaan aina pienemmäksi kuin ne)
+            satunnaisluku = secrets.randbits(e_kanta_bits)
+            satunnaisluku = sympy.prevprime(satunnaisluku)
+        else:
+            satunnaisluku = vakio_e
         # gcd on algoritmi, joka kulkee nimellä 'Euclidean algorithm'
         # sillä varmistetaan, että e:ksi valitulla satunnaisluvulla ei ole muita yhteisiä tekijöitä fii:n kanssa, paitsi
         # numero 1.
         val = math.gcd(satunnaisluku, fii)
-        if val == 1:
-            global e
-            e = satunnaisluku
-            return e
-
+        while val != 1:
+            satunnaisluku += 1
+            val = math.gcd(satunnaisluku, fii)
+        global e
+        e = satunnaisluku
+        return e
 
 
 def valitse_d(e_i=None, fii_i=None):
@@ -139,6 +140,7 @@ def salaa(salaamaton_teksti, julkinen_avain=None):
     # otetaan globaalit muuttujat käyttöön
     global n
     global e
+    alkuaika = time.time()
     avain = None
     # korvataan globaalit muuttujat, jos parametreissa on annettu uudet arvot avaimille
     if avain is not None:
@@ -148,12 +150,17 @@ def salaa(salaamaton_teksti, julkinen_avain=None):
     #Muutetaan jokainen kirjain salatuksi numeroksi käyttämällä kaavaa a^b mod m
     salattu = [(ord(char) ** avain) % n for char in salaamaton_teksti]
     #Palautetaan salatut kirjaimet listana
+    loppuaika = time.time()
+    kulunut = loppuaika - alkuaika
+    print("Aikaa salaukseen kului:", kulunut, "sekuntia")
     return salattu
 
 def pura(salattu_teksti,yksityinen_avain=None):
     # otetaan käyttöön globaalit muuuttujat
+    alkuaika = time.time()
     global d
     global n
+
     # korvataan globaalit muuttujat jos parametreissa on annettu uudet
     if yksityinen_avain is not None:
         d, n = yksityinen_avain
@@ -169,15 +176,15 @@ def pura(salattu_teksti,yksityinen_avain=None):
     # Puretaan salaus avaimella käyttäen kaavaa a^b mod m
     plain = [chr(pow(char, avain, n)) for char in salattu_teksti]
     # Palautetaan purettu teksti string-muuttujana
+    loppuaika = time.time()
+    kulunut = loppuaika - alkuaika
+    print("Aikaa purkuun kului:", kulunut, "sekuntia")
+
     return ''.join(plain)
 
 
 if __name__ == "__main__":
 
-    total = 0
-    for i in range(0, 63):
-        total += i
-    input(total)
     alkuluvut = luo_alkuluvut_fii()
     print("alkuluvut: ", alkuluvut[0])
     print("fii: ", fii)
@@ -187,10 +194,11 @@ if __name__ == "__main__":
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
-    salattu = salaa("Onpa hauska juttu.")
-    print(salattu)
+    viesti = "Never gonna give you up, never gonna let you down..."
+    salattu = salaa(viesti)
+    print("Salattu viesti:", salattu)
     viesti = pura(salattu)
-    print(viesti)
+    print("Purettu viesti:", viesti)
     """
     e = 9
     p = 71
