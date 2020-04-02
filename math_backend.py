@@ -82,8 +82,8 @@ def valitse_e(vakio_e=None):
         elif vakio_e > fii:
             print("eksponentti e ei saa olla suurempi kuin fii, kokeile toisella numerolla...")
             return None
-        else:
-            satunnaisluku = vakio_e
+        satunnaisluku = vakio_e
+        if not sympy.isprime(satunnaisluku):
             satunnaisluku = sympy.prevprime(satunnaisluku)
 
         # gcd on algoritmi, joka kulkee nimellä 'Euclidean algorithm'
