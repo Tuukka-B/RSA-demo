@@ -145,11 +145,11 @@ def ota_avaimet(julkinen_avain, yksityinen_avain):
 
 def salaa(salaamaton_teksti, julkinen_avain=None):
     # otetaan globaalit muuttujat käyttöön
+    alkuaika = time.time()
     global n
     global e
     if e is None:
         raise ValueError("Virhe: e ei määritelty! Ohjelma sammuu...")
-    alkuaika = time.time()
     avain = None
     # korvataan globaalit muuttujat, jos parametreissa on annettu uudet arvot avaimille
     if avain is not None:
@@ -160,8 +160,8 @@ def salaa(salaamaton_teksti, julkinen_avain=None):
     salattu = [(ord(char) ** avain) % n for char in salaamaton_teksti]
     #Palautetaan salatut kirjaimet listana
     loppuaika = time.time()
-    kulunut = loppuaika - alkuaika
-    print("Aikaa salaukseen kului:", kulunut, "sekuntia")
+    kulunut = round((loppuaika - alkuaika) * 1000)
+    print("Aikaa salaukseen kului:", kulunut, "millisekuntia")
     return salattu
 
 def pura(salattu_teksti,yksityinen_avain=None):
@@ -186,8 +186,8 @@ def pura(salattu_teksti,yksityinen_avain=None):
     plain = [chr(pow(char, avain, n)) for char in salattu_teksti]
     # Palautetaan purettu teksti string-muuttujana
     loppuaika = time.time()
-    kulunut = loppuaika - alkuaika
-    print("Aikaa purkuun kului:", kulunut, "sekuntia")
+    kulunut = round((loppuaika - alkuaika) * 1000)
+    print("Aikaa purkuun kului:", kulunut, "millisekuntia")
 
     return ''.join(plain)
 
@@ -199,7 +199,7 @@ if __name__ == "__main__":
     print("fii: ", fii)
     # pituus = int(math.log(fii, 256)) + 1
     # input(pituus)
-    e = valitse_e(1000**210)
+    e = valitse_e()
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
