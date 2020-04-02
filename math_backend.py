@@ -80,7 +80,8 @@ def valitse_e(vakio_e=None):
             return None
         else:
             satunnaisluku = vakio_e
-            satunnaisluku = sympy.prevprime(satunnaisluku)
+            if not sympy.isprime(satunnaisluku):
+                satunnaisluku = sympy.prevprime(satunnaisluku)
 
         # gcd on algoritmi, joka kulkee nimellä 'Euclidean algorithm'
         # sillä varmistetaan, että e:ksi valitulla satunnaisluvulla ei ole muita yhteisiä tekijöitä fii:n kanssa, paitsi
@@ -199,7 +200,7 @@ if __name__ == "__main__":
     print("fii: ", fii)
     # pituus = int(math.log(fii, 256)) + 1
     # input(pituus)
-    e = valitse_e()
+    e = valitse_e(32768)
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
