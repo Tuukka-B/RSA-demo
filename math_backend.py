@@ -33,6 +33,7 @@ def luo_alkuluvut_fii(*, bittimäärä=1024):
     global n
     global bitit
     # määritetään bittimäärä alkuluvuille
+    alkuaika = time.time()
     bitit = bittimäärä
     if len(alkuluvut) == 2:
         input("Paina enter ylikirjoittaaksesi vanhat alkuluvut")
@@ -53,7 +54,10 @@ def luo_alkuluvut_fii(*, bittimäärä=1024):
     p = alkuluvut[0]
     q = alkuluvut[1]
     n = p * q
+    loppuaika = time.time()
     fii = (p - 1) * (q - 1)
+    kulunut = round((loppuaika - alkuaika) * 1000)
+    print("Aikaa n:n luontiin kului:", kulunut, "millisekuntia")
 
     return alkuluvut, fii, n
 
