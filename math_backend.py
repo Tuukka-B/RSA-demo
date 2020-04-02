@@ -196,10 +196,11 @@ if __name__ == "__main__":
 
     alkuluvut = luo_alkuluvut_fii()
     print("alkuluvut: ", alkuluvut[0])
+    print("n: ", alkuluvut[2])
     print("fii: ", fii)
     # pituus = int(math.log(fii, 256)) + 1
     # input(pituus)
-    e = valitse_e()
+    e = valitse_e(65537)
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
