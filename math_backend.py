@@ -82,7 +82,9 @@ def valitse_e(vakio_e=None):
         elif vakio_e > fii:
             print("eksponentti e ei saa olla suurempi kuin fii, kokeile toisella numerolla...")
             return None
-        satunnaisluku = vakio_e
+        else:
+            satunnaisluku = vakio_e
+
         if not sympy.isprime(satunnaisluku):
             satunnaisluku = sympy.prevprime(satunnaisluku)
 
@@ -204,11 +206,11 @@ if __name__ == "__main__":
     print("fii: ", fii)
     # pituus = int(math.log(fii, 256)) + 1
     # input(pituus)
-    e = valitse_e(65537)
+    e = valitse_e(65537373)
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
-    viesti = "Never gonna give you up, never gonna let you down..."
+    viesti = "Testailtu!"
     salattu = salaa(viesti)
     print("Salattu viesti:", salattu)
     viesti = pura(salattu)
