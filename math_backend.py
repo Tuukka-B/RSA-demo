@@ -75,6 +75,7 @@ def valitse_e(vakio_e=None):
         if not vakio_e:
             tavumaara = int(math.log(e_kanta, 256)) + 1
             e_kanta_bits = len(e_kanta.to_bytes(tavumaara, byteorder="big")) * 8 + 4
+            print("e:n koko on ", e_kanta_bits, "bittiä!")
             # muodostetaan kaksi lukua, josta haemme seuraavaksi alimman alkuluvun
             # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku valitaan aina pienemmäksi kuin ne)
             satunnaisluku = secrets.randbits(e_kanta_bits)
@@ -83,6 +84,10 @@ def valitse_e(vakio_e=None):
             raise ValueError("eksponentti e ei saa olla suurempi kuin fii, kokeile toisella numerolla...")
         else:
             satunnaisluku = vakio_e
+            tavumaara = int(math.log(vakio_e, 256)) + 1
+            e_vakio_bits = len(vakio_e.to_bytes(tavumaara, byteorder="big")) * 8 + 4
+            print("e:n koko on ", e_vakio_bits, "bittiä!")
+
 
         if not sympy.isprime(satunnaisluku):
             satunnaisluku = sympy.prevprime(satunnaisluku)
