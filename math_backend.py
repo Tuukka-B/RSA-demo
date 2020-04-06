@@ -158,12 +158,13 @@ def salaa(salaamaton_teksti, julkinen_avain=None):
     alkuaika = time.time()
     global n
     global e
-    if e is None:
-        raise ValueError("Virhe: e ei määritelty! Ohjelma sammuu...")
     avain = None
     # korvataan globaalit muuttujat, jos parametreissa on annettu uudet arvot avaimille
     if avain is not None:
         e, n = julkinen_avain
+    if e is None:
+        raise ValueError("Virhe: e ei määritelty! Ohjelma sammuu...")
+
     # määritetään avain ((kosmeettinen toimenpide, sillä voisimme käyttää myös suoraan muuttujaa e)
     avain = e
     #Muutetaan jokainen kirjain salatuksi numeroksi käyttämällä kaavaa a^b mod m
