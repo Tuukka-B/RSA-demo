@@ -105,6 +105,7 @@ def valitse_e(vakio_e=None):
 
 
 def valitse_d(e_i=None, fii_i=None):
+    alkuaika = time.time()
     # tämä algoritmi kulkee nimellä 'Extended Euclidean algorithm'
     # algoritmi etsii ehdot, jossa totetuu ax + by = gcd(a, b)
     # meillä yhtälöön sijoitetaan x(fii) + d(e) = gcd(x, d)
@@ -141,6 +142,9 @@ def valitse_d(e_i=None, fii_i=None):
     if temp_fii == 1:
         global d
         d = d_i + fii
+        loppuaika = time.time()
+        kulunut = round((loppuaika - alkuaika) * 1000)
+        print("Aikaa d:n luontiin kului:", kulunut, "millisekuntia")
         return d
 
 def anna_avaimet():
@@ -211,7 +215,7 @@ if __name__ == "__main__":
     print("fii: ", fii)
     # pituus = int(math.log(fii, 256)) + 1
     # input(pituus)
-    e = valitse_e(900000)
+    e = valitse_e(1300000)
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
