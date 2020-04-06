@@ -85,7 +85,7 @@ def valitse_e(vakio_e=None):
         else:
             satunnaisluku = vakio_e
             tavumaara = int(math.log(vakio_e, 256)) + 1
-            e_vakio_bits = len(vakio_e.to_bytes(tavumaara, byteorder="big")) * 8 + 4
+            e_vakio_bits = len(vakio_e.to_bytes(tavumaara, byteorder="big")) * 8
             print("e:n koko on ", e_vakio_bits, "bittiä!")
 
 
@@ -210,7 +210,7 @@ if __name__ == "__main__":
     print("fii: ", fii)
     # pituus = int(math.log(fii, 256)) + 1
     # input(pituus)
-    e = valitse_e()
+    e = valitse_e(900000)
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
