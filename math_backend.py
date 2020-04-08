@@ -10,21 +10,21 @@ d = 0
 n = 0
 bitit = 0
 
-def tuo_avaimet(e_i=None, fii_i=None, alkuluvut_i=[], d_i=None):
+def tuo_muuttujat(e_uusi=None, fii_uusi=None, alkuluvut_uusi=[], d_uusi=None):
     # tuodaan globaalit muuttujat
     global e
     global fii
     global alkuluvut
     global d
     #korvataan globaalit muuttujat, jos parametreissa uusia arvoja
-    if e_i is not None:
-        e = e_i
-    if fii_i is not None:
-        fii = fii_i
-    if len(alkuluvut_i) == 2:
-        alkuluvut = alkuluvut_i
-    if d_i is not None:
-        d = d_i
+    if e_uusi is not None:
+        e = e_uusi
+    if fii_uusi is not None:
+        fii = fii_uusi
+    if len(alkuluvut_uusi) == 2:
+        alkuluvut = alkuluvut_uusi
+    if d_uusi is not None:
+        d = d_uusi
 
 def luo_alkuluvut_fii(*, bittimäärä=1024):
     # tuodaan globaalit muuttujat
@@ -104,13 +104,16 @@ def valitse_e(vakio_e=None):
         return e
 
 
-def valitse_d(e_i=None, fii_i=None):
+def valitse_d(e_uusi=None, fii_uusi=None):
     alkuaika = time.time()
     # tämä algoritmi kulkee nimellä 'Extended Euclidean algorithm'
     # algoritmi etsii ehdot, jossa totetuu ax + by = gcd(a, b)
     # meillä yhtälöön sijoitetaan x(fii) + d(e) = gcd(x, d)
     global e
     global fii
+    if e_uusi is not None and fii_uusi is not None:
+        fii = fii_uusi
+        e = e_uusi
     if e is None:
         raise ValueError("Virhe: e ei määritelty! Ohjelma sammuu...")
     d_i = 0
@@ -119,9 +122,6 @@ def valitse_d(e_i=None, fii_i=None):
     y1 = 1
     temp_fii = fii
     temp_e = e
-    if e_i is not None and fii_i is not None:
-        temp_fii = fii_i
-        temp_e = e_i
 
     while temp_e > 0:
         #kolme seuraavaa riviä antavat temp_fiille saman arvon kuin gcd(temp_fii_temp_e)
@@ -177,7 +177,7 @@ def salaa(salaamaton_teksti, julkinen_avain=None):
     loppuaika = time.time()
     kulunut = round((loppuaika - alkuaika) * 1000)
     print("Aikaa salaukseen kului:", kulunut, "millisekuntia")
-    return salattu
+    return salattu, kulunut
 
 def pura(salattu_teksti,yksityinen_avain=None):
     # otetaan käyttöön globaalit muuuttujat
@@ -204,27 +204,58 @@ def pura(salattu_teksti,yksityinen_avain=None):
     kulunut = round((loppuaika - alkuaika) * 1000)
     print("Aikaa purkuun kului:", kulunut, "millisekuntia")
 
-    return ''.join(plain)
+    return ''.join(plain), kulunut
 
 
 if __name__ == "__main__":
 
-    alkuluvut = luo_alkuluvut_fii()
+    alkuluvut = luo_alkuluvut_fii(bittimäärä=4096)
     print("alkuluvut: ", alkuluvut[0])
     print("n: ", alkuluvut[2])
     print("fii: ", fii)
-    # pituus = int(math.log(fii, 256)) + 1
-    # input(pituus)
-    e = valitse_e(1300000)
+    # pituus = int(math.log(4000000, 256)) + 1
+    pituus = len("%i" % alkuluvut[0][0])
+    input(pituus)
+    # input(len(alkuluvut[0]))
+    e = valitse_e(35537)
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
     viesti = "Testailtu!"
+    print("Viestin pituus:", len(viesti))
     salattu = salaa(viesti)
     print("Salattu viesti:", salattu)
-    viesti = pura(salattu)
-    print("Purettu viesti:", viesti)
+    viesti = pura(salattu[0])
+    print("Purettu viesti:", salattu)
     """
+    num = 0
+    salausaika = []
+    purkuaika = []
+    while num < 5:
+        factor = 9
+        viesti = "A" * 10 * factor
+        # print("Viestin pituus:", len(viesti))
+        salattu = salaa(viesti)
+        salausaika.append(salattu[1])
+        # print("Salattu viesti:", salattu)
+        viesti = pura(salattu[0])
+        purkuaika.append(viesti[1])
+        # print("Purettu viesti:", viesti)
+        num += 1
+    print("salausaika:", salausaika)
+    keskiarvo = 0
+    for num in salausaika:
+        keskiarvo += num
+    keskiarvo = keskiarvo/len(salausaika)
+    print("salausajan keskiarvo:", keskiarvo)
+    print("purkuaika:", purkuaika)
+    keskiarvo = 0
+    for num in purkuaika:
+        keskiarvo += num
+    keskiarvo = keskiarvo/len(purkuaika)
+    print("purkuajan keskiarvo:", keskiarvo)
+
+    
     e = 9
     p = 71
     q = 83
