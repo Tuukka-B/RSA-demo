@@ -28,7 +28,7 @@ def tuo_muuttujat(e_uusi=None, fii_uusi=None, alkuluvut_uusi=[], d_uusi=None):
 
 def luo_alkuluvut_fii(*, bittimäärä=1024):
     # tuodaan globaalit muuttujat
-    alkuaika = time.time()
+    # alkuaika = time.time()
     global alkuluvut
     global fii
     global n
@@ -56,10 +56,10 @@ def luo_alkuluvut_fii(*, bittimäärä=1024):
     loppuaika = time.time()
     n = p * q
     fii = (p - 1) * (q - 1)
-    kulunut = round((loppuaika - alkuaika) * 1000)
+    # kulunut = round((loppuaika - alkuaika) * 1000)
     # print("Aikaa n:n luontiin kului:", kulunut, "millisekuntia")
 
-    return alkuluvut, fii, n, kulunut
+    return alkuluvut, fii, n
 
 def valitse_e(vakio_e=None):
     global fii
@@ -75,7 +75,7 @@ def valitse_e(vakio_e=None):
         if not vakio_e:
             tavumaara = int(math.log(e_kanta, 256)) + 1
             e_kanta_bits = len(e_kanta.to_bytes(tavumaara, byteorder="big")) * 8 + 4
-            print("e:n koko on ", e_kanta_bits, "bittiä!")
+            # print("e:n koko on ", e_kanta_bits, "bittiä!")
             # muodostetaan kaksi lukua, josta haemme seuraavaksi alimman alkuluvun
             # (e:n täytyy olla aina pienempi kuin itse alkuluvut ja fii, siksi alkuluku valitaan aina pienemmäksi kuin ne)
             satunnaisluku = secrets.randbits(e_kanta_bits)
@@ -86,7 +86,7 @@ def valitse_e(vakio_e=None):
             satunnaisluku = vakio_e
             tavumaara = int(math.log(vakio_e, 256)) + 1
             e_vakio_bits = len(vakio_e.to_bytes(tavumaara, byteorder="big")) * 8
-            print("e:n koko on ", e_vakio_bits, "bittiä!")
+            # print("e:n koko on ", e_vakio_bits, "bittiä!")
 
 
         if not sympy.isprime(satunnaisluku):
@@ -105,7 +105,7 @@ def valitse_e(vakio_e=None):
 
 
 def valitse_d(e_uusi=None, fii_uusi=None):
-    alkuaika = time.time()
+    # alkuaika = time.time()
     # tämä algoritmi kulkee nimellä 'Extended Euclidean algorithm'
     # algoritmi etsii ehdot, jossa totetuu ax + by = gcd(a, b)
     # meillä yhtälöön sijoitetaan x(fii) + d(e) = gcd(x, d)
@@ -142,9 +142,9 @@ def valitse_d(e_uusi=None, fii_uusi=None):
     if temp_fii == 1:
         global d
         d = d_i + fii
-        loppuaika = time.time()
-        kulunut = round((loppuaika - alkuaika) * 1000)
-        print("Aikaa d:n luontiin kului:", kulunut, "millisekuntia")
+        # loppuaika = time.time()
+        # kulunut = round((loppuaika - alkuaika) * 1000)
+        # print("Aikaa d:n luontiin kului:", kulunut, "millisekuntia")
         return d
 
 def anna_avaimet():
@@ -159,7 +159,7 @@ def ota_avaimet(julkinen_avain, yksityinen_avain):
 
 def salaa(salaamaton_teksti, julkinen_avain=None):
     # otetaan globaalit muuttujat käyttöön
-    alkuaika = time.time()
+    # alkuaika = time.time()
     global n
     global e
     avain = None
@@ -174,14 +174,14 @@ def salaa(salaamaton_teksti, julkinen_avain=None):
     #Muutetaan jokainen kirjain salatuksi numeroksi käyttämällä kaavaa a^b mod m
     salattu = [(ord(char) ** avain) % n for char in salaamaton_teksti]
     #Palautetaan salatut kirjaimet listana
-    loppuaika = time.time()
-    kulunut = round((loppuaika - alkuaika) * 1000)
-    print("Aikaa salaukseen kului:", kulunut, "millisekuntia")
-    return salattu, kulunut
+    # loppuaika = time.time()
+    # kulunut = round((loppuaika - alkuaika) * 1000)
+    # print("Aikaa salaukseen kului:", kulunut, "millisekuntia")
+    return salattu
 
 def pura(salattu_teksti,yksityinen_avain=None):
     # otetaan käyttöön globaalit muuuttujat
-    alkuaika = time.time()
+    # alkuaika = time.time()
     global d
     global n
 
@@ -200,11 +200,11 @@ def pura(salattu_teksti,yksityinen_avain=None):
     # Puretaan salaus avaimella käyttäen kaavaa a^b mod m
     plain = [chr(pow(char, avain, n)) for char in salattu_teksti]
     # Palautetaan purettu teksti string-muuttujana
-    loppuaika = time.time()
-    kulunut = round((loppuaika - alkuaika) * 1000)
-    print("Aikaa purkuun kului:", kulunut, "millisekuntia")
+    # loppuaika = time.time()
+    # kulunut = round((loppuaika - alkuaika) * 1000)
+    # print("Aikaa purkuun kului:", kulunut, "millisekuntia")
 
-    return ''.join(plain), kulunut
+    return ''.join(plain)
 
 
 if __name__ == "__main__":
@@ -233,11 +233,15 @@ if __name__ == "__main__":
     kesto = 0
     keskiarvo = []
     while num < 5:
-        factor = 4
+        alkuaika = time.time()
+        factor = 1
         print("Kerta", num+1)
-        alkuluvut = luo_alkuluvut_fii(bittimäärä=1024* factor)
-        kesto = alkuluvut[3]
-        keskiarvo.append(kesto)
+        alkuluvut = luo_alkuluvut_fii(bittimäärä=1024 * factor)
+        e = valitse_e(35537)
+        d = valitse_d()
+        loppuaika = time.time()
+        kulunut = round((loppuaika - alkuaika) * 1000)
+        keskiarvo.append(kulunut)
         num += 1
     print("Kestot:", keskiarvo)
     keskiarvo = sum(keskiarvo)/len(keskiarvo)
