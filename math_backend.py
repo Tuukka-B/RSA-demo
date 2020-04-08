@@ -28,12 +28,12 @@ def tuo_muuttujat(e_uusi=None, fii_uusi=None, alkuluvut_uusi=[], d_uusi=None):
 
 def luo_alkuluvut_fii(*, bittimäärä=1024):
     # tuodaan globaalit muuttujat
+    alkuaika = time.time()
     global alkuluvut
     global fii
     global n
     global bitit
     # määritetään bittimäärä alkuluvuille
-    alkuaika = time.time()
     bitit = bittimäärä
     if len(alkuluvut) == 2:
         input("Paina enter ylikirjoittaaksesi vanhat alkuluvut")
@@ -53,13 +53,13 @@ def luo_alkuluvut_fii(*, bittimäärä=1024):
 
     p = alkuluvut[0]
     q = alkuluvut[1]
-    n = p * q
     loppuaika = time.time()
+    n = p * q
     fii = (p - 1) * (q - 1)
     kulunut = round((loppuaika - alkuaika) * 1000)
-    print("Aikaa n:n luontiin kului:", kulunut, "millisekuntia")
+    # print("Aikaa n:n luontiin kului:", kulunut, "millisekuntia")
 
-    return alkuluvut, fii, n
+    return alkuluvut, fii, n, kulunut
 
 def valitse_e(vakio_e=None):
     global fii
@@ -209,18 +209,19 @@ def pura(salattu_teksti,yksityinen_avain=None):
 
 if __name__ == "__main__":
 
-    alkuluvut = luo_alkuluvut_fii(bittimäärä=4096)
+    alkuluvut = luo_alkuluvut_fii(bittimäärä=1024)
     print("alkuluvut: ", alkuluvut[0])
     print("n: ", alkuluvut[2])
     print("fii: ", fii)
     # pituus = int(math.log(4000000, 256)) + 1
     pituus = len("%i" % alkuluvut[0][0])
-    input(pituus)
+    # input(pituus)
     # input(len(alkuluvut[0]))
     e = valitse_e(35537)
     d = valitse_d()
     print("e: ", e)
     print("d:", d)
+    """
     viesti = "Testailtu!"
     print("Viestin pituus:", len(viesti))
     salattu = salaa(viesti)
@@ -229,6 +230,19 @@ if __name__ == "__main__":
     print("Purettu viesti:", salattu)
     """
     num = 0
+    kesto = 0
+    keskiarvo = []
+    while num < 5:
+        print("Kerta", num+1)
+        alkuluvut = luo_alkuluvut_fii(bittimäärä=1024)
+        kesto = alkuluvut[3]
+        keskiarvo.append(kesto)
+        num += 1
+
+    keskiarvo = sum(keskiarvo)/len(keskiarvo)
+    print("keskiarvo:", keskiarvo, "millisekuntia")
+
+    """
     salausaika = []
     purkuaika = []
     while num < 5:
@@ -254,8 +268,8 @@ if __name__ == "__main__":
         keskiarvo += num
     keskiarvo = keskiarvo/len(purkuaika)
     print("purkuajan keskiarvo:", keskiarvo)
-
-    
+    """
+    """
     e = 9
     p = 71
     q = 83
