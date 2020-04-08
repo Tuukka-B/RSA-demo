@@ -233,12 +233,13 @@ if __name__ == "__main__":
     kesto = 0
     keskiarvo = []
     while num < 5:
+        factor = 4
         print("Kerta", num+1)
-        alkuluvut = luo_alkuluvut_fii(bittimäärä=1024)
+        alkuluvut = luo_alkuluvut_fii(bittimäärä=1024* factor)
         kesto = alkuluvut[3]
         keskiarvo.append(kesto)
         num += 1
-
+    print("Kestot:", keskiarvo)
     keskiarvo = sum(keskiarvo)/len(keskiarvo)
     print("keskiarvo:", keskiarvo, "millisekuntia")
 
